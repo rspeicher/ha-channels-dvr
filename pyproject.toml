@@ -1,6 +1,6 @@
 [project]
 name = "ha-channels-dvr"
-version = "0.1.0"
+version = "1.0.0"
 description = "Home Assistant custom integration for the Channels DVR server"
 requires-python = ">=3.13"
 dependencies = []
