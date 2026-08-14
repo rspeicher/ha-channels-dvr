@@ -99,10 +99,9 @@ PATH="$PWD/../../rspeicher/ha-channels-dvr/.venv/bin:$PATH" \
   --integration-path ~/Code/rspeicher/ha-channels-dvr/custom_components/channels_dvr
 ```
 
-API notes for the Channels DVR server live in [`docs/channels-dvr.md`](docs/channels-dvr.md).
-Note the warning there: never call `GET /dvr/files` — the response is ~85MB and
-has crashed servers. The API client in this integration deliberately has no
-method for it.
+A warning for anyone working against the Channels DVR API: never call
+`GET /dvr/files` — the response is ~85MB and has crashed servers. The API
+client in this integration deliberately has no method for it.
 
 ## Extending
 
