@@ -1,0 +1,12 @@
+{
+  "domain": "channels_dvr",
+  "name": "Channels DVR",
+  "codeowners": ["@rspeicher"],
+  "config_flow": true,
+  "documentation": "https://github.com/rspeicher/ha-channels-dvr",
+  "integration_type": "service",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/rspeicher/ha-channels-dvr/issues",
+  "requirements": [],
+  "version": "0.1.0"
+}

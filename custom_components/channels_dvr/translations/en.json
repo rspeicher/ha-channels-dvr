@@ -1,0 +1,39 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "description": "Connect to your Channels DVR server.",
+        "data": {
+          "host": "Host",
+          "port": "Port",
+          "ssl": "Uses an SSL certificate",
+          "verify_ssl": "Verify SSL certificate"
+        },
+        "data_description": {
+          "host": "The hostname or IP address of your Channels DVR server.",
+          "port": "The port of the Channels DVR API (8089 by default).",
+          "ssl": "Enable if the server is reached over HTTPS.",
+          "verify_ssl": "Disable for self-signed or private-CA certificates."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect"
+    },
+    "abort": {
+      "already_configured": "Service is already configured"
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "playing": {
+        "name": "Playing"
+      }
+    },
+    "sensor": {
+      "active_streams": {
+        "name": "Active streams"
+      }
+    }
+  }
+}
