@@ -11,9 +11,37 @@ server.
 
 | Entity | Type | Description |
 |--------|------|-------------|
-| `sensor.channels_dvr_active_streams` | Sensor | Number of streams currently playing. A `streams` attribute lists each one with its human-readable `description` (e.g. "Watching Saturday Night Live - Season 32, Episode 3 from TV at 0s"), `file_id`, and `client` address. |
+| `sensor.channels_dvr_active_streams` | Sensor | Number of streams currently playing, with a `streams` attribute describing each one (see below). |
 | `binary_sensor.channels_dvr_playing` | Binary sensor (`running`) | On when at least one stream is active. Handy for simple automations ("pause the vacuum while someone is watching"). |
 | `button.channels_dvr_refresh_<source>_m3u` | Button | One per M3U source; pressing it triggers a playlist re-fetch (`POST /providers/m3u/sources/<name>/refresh`). |
+
+### Stream attributes
+
+Each entry in the sensor's `streams` attribute uses Home Assistant's
+`media_player` attribute naming (matching the shape the Plex integration
+provides), with unknown fields omitted:
+
+```yaml
+streams:
+  - description: Watching The Rock (1996) from TV at 0s
+    file_id: 442
+    client: 10.0.20.87
+    media_position: 0
+    media_content_type: movie   # movie | episode | video
+    media_title: The Rock
+    media_duration: 8190        # seconds
+    library: Movies             # from the file's import path
+    year: 1996
+```
+
+TV episodes additionally carry `media_series_title`, `media_season`, and
+`media_episode`, with `media_title` holding the episode title.
+
+File metadata comes from `GET /dvr/files/{id}`, fetched once per stream when it
+first appears and cached while it plays — steady-state polling stays at a
+single `GET /dvr` per cycle. `media_position` is parsed from the server's
+activity description and appears to reflect the playback start offset rather
+than a live counter.
 
 M3U sources are enumerated once at setup from `GET /dvr/lineups`. If you add or
 remove a source on the DVR, reload the integration (Settings → Devices &

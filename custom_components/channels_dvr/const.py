@@ -19,3 +19,11 @@ M3U_PREFIX: Final = "M3U-"
 # prefix may itself contain dashes, so anchor on the "file-" marker and treat
 # everything after the file ID as the client address.
 ACTIVITY_KEY_RE: Final = re.compile(r"file-(\d+)-(.+)$")
+
+# Activity descriptions end with "... at {seconds}s". Observed to reflect the
+# playback start offset rather than a live position counter.
+ACTIVITY_POSITION_RE: Final = re.compile(r"\bat (\d+(?:\.\d+)?)s$")
+
+# Movie titles arrive as "Title (1996)" while ReleaseYear is also provided
+# separately; strip the redundant suffix.
+TITLE_YEAR_RE: Final = re.compile(r"\s*\(\d{4}\)$")

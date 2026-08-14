@@ -69,6 +69,10 @@ class ChannelsDVRClient:
         """Return the map of device IDs to bound guide lineups."""
         return await self._request("GET", "dvr/lineups")
 
+    async def get_file(self, file_id: int) -> dict[str, Any]:
+        """Return full metadata for a single recorded/imported file."""
+        return await self._request("GET", f"dvr/files/{file_id}")
+
     async def refresh_source(self, name: str) -> None:
         """Trigger a playlist refresh for an M3U source."""
         await self._request("POST", f"providers/m3u/sources/{name}/refresh")

@@ -8,7 +8,7 @@ from homeassistant.components.sensor import SensorEntity, SensorStateClass
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
-from .coordinator import ChannelsDVRConfigEntry, ChannelsDVRCoordinator
+from .coordinator import ChannelsDVRConfigEntry, ChannelsDVRCoordinator, StreamInfo
 from .entity import ChannelsDVREntity
 
 PARALLEL_UPDATES = 0
@@ -42,14 +42,35 @@ class ChannelsDVRActiveStreamsSensor(ChannelsDVREntity, SensorEntity):
 
     @property
     def extra_state_attributes(self) -> dict[str, Any]:
-        """Expose per-stream detail for automations and templates."""
+        """Expose per-stream detail for automations and templates.
+
+        Media attributes follow Home Assistant's media_player naming (as the
+        Plex integration does) and are omitted when unknown.
+        """
         return {
             "streams": [
-                {
-                    "description": stream.description,
-                    "file_id": stream.file_id,
-                    "client": stream.client,
-                }
-                for stream in self.coordinator.data.streams
+                _stream_attributes(stream) for stream in self.coordinator.data.streams
             ]
         }
+
+
+def _stream_attributes(stream: StreamInfo) -> dict[str, Any]:
+    """Build the attribute dict for one stream, dropping unknown fields."""
+    attributes: dict[str, Any] = {
+        "description": stream.description,
+        "file_id": stream.file_id,
+        "client": stream.client,
+        "media_position": stream.position,
+    }
+    if media := stream.media:
+        attributes |= {
+            "media_content_type": media.content_type,
+            "media_title": media.title,
+            "media_series_title": media.series_title,
+            "media_season": media.season,
+            "media_episode": media.episode,
+            "media_duration": media.duration,
+            "library": media.library,
+            "year": media.year,
+        }
+    return {key: value for key, value in attributes.items() if value is not None}
