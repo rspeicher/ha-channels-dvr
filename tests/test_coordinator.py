@@ -69,6 +69,19 @@ def test_parse_activity_fractional_position() -> None:
     assert stream.position == 123
 
 
+def test_parse_activity_go_duration_positions() -> None:
+    """Positions arrive as Go-style durations with h/m/s components."""
+    cases = {
+        "Watching X from TV at 0s": 0,
+        "Watching X from TV at 4m1s": 241,
+        "Watching X from TV at 1h2m3.5s": 3723,
+        "Watching X from TV at 1h5s": 3605,
+    }
+    for description, expected in cases.items():
+        (stream,) = parse_activity({"1-file-5-10.0.0.1": description})
+        assert stream.position == expected, description
+
+
 def test_parse_file_metadata_movie() -> None:
     """Movies get a cleaned title, year, duration, and library."""
     file = {

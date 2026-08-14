@@ -20,9 +20,12 @@ M3U_PREFIX: Final = "M3U-"
 # everything after the file ID as the client address.
 ACTIVITY_KEY_RE: Final = re.compile(r"file-(\d+)-(.+)$")
 
-# Activity descriptions end with "... at {seconds}s". Observed to reflect the
-# playback start offset rather than a live position counter.
-ACTIVITY_POSITION_RE: Final = re.compile(r"\bat (\d+(?:\.\d+)?)s$")
+# Activity descriptions end with "... at {position}", where position is a
+# Go-style duration ("0s", "4m1s", "1h2m3.5s"). For direct file playback this
+# is a live position; virtual-channel streams stay pinned at "0s".
+ACTIVITY_POSITION_RE: Final = re.compile(
+    r"\bat (?:(\d+)h)?(?:(\d+)m)?(\d+(?:\.\d+)?)s$"
+)
 
 # Movie titles arrive as "Title (1996)" while ReleaseYear is also provided
 # separately; strip the redundant suffix.

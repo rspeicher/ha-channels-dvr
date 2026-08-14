@@ -74,7 +74,10 @@ def parse_activity(activity: dict[str, str]) -> list[StreamInfo]:
             file_id = int(match.group(1))
             client = match.group(2)
         if match := ACTIVITY_POSITION_RE.search(description):
-            position = int(float(match.group(1)))
+            hours, minutes, seconds = match.groups()
+            position = (
+                int(hours or 0) * 3600 + int(minutes or 0) * 60 + int(float(seconds))
+            )
         streams.append(
             StreamInfo(
                 session_key=key,

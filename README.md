@@ -23,25 +23,27 @@ provides), with unknown fields omitted:
 
 ```yaml
 streams:
-  - description: Watching The Rock (1996) from TV at 0s
-    file_id: 442
+  - description: Watching Brooklyn Nine-Nine - Season 3, Episode 20 from TV at 4m1s
+    file_id: 1840
     client: 10.0.20.87
-    media_position: 0
-    media_content_type: movie   # movie | episode | video
-    media_title: The Rock
-    media_duration: 8190        # seconds
-    library: Movies             # from the file's import path
-    year: 1996
+    media_position: 241         # seconds
+    media_content_type: episode # movie | episode | video
+    media_title: Paranoia
+    media_series_title: Brooklyn Nine-Nine
+    media_season: 3
+    media_episode: 20
+    media_duration: 1283        # seconds
+    library: TV                 # from the file's import path
 ```
 
-TV episodes additionally carry `media_series_title`, `media_season`, and
-`media_episode`, with `media_title` holding the episode title.
+Movies carry `media_title` (with the redundant "(year)" suffix stripped) and
+`year` instead of the series fields.
 
 File metadata comes from `GET /dvr/files/{id}`, fetched once per stream when it
 first appears and cached while it plays — steady-state polling stays at a
-single `GET /dvr` per cycle. `media_position` is parsed from the server's
-activity description and appears to reflect the playback start offset rather
-than a live counter.
+single `GET /dvr` per cycle. `media_position` is a live position for direct
+file playback (updated by the server every poll or two); virtual-channel
+streams are linear, so their position stays pinned at 0.
 
 M3U sources are enumerated once at setup from `GET /dvr/lineups`. If you add or
 remove a source on the DVR, reload the integration (Settings → Devices &
